@@ -1,0 +1,48 @@
+var filter_doors = function(doors, not_incl_door) {
+  return filter(function(x) { return x != not_incl_door; }, doors);
+}
+
+var set_up = function() {
+  var doors = [0, 1, 2];
+  var price = uniformDraw(doors);
+  var player_choice = uniformDraw(doors);
+
+  return {
+    doors: doors,
+    price: price,
+    player_choice: player_choice
+  };
+}
+
+var monty_pick_a = function(doors, price, player_choice) {
+  var doors = filter_doors(filter_doors(doors, price), player_choice);
+  return uniformDraw(doors);
+}
+
+var monty_pick_b = function(doors, price, player_choice) {
+  var doors = filter_doors(filter_doors(doors, price), player_choice);
+  return doors[0];
+}
+
+var monty_pick_c = function(doors, price, player_choice) {
+  var doors = filter_doors(doors, player_choice);
+  return uniformDraw(doors);
+}
+
+var switch_door = function(doors, player_choice, monty_pick) {
+  return filter_doors(filter_doors(doors, player_choice), monty_pick)[0];
+}
+
+var monty_hall_problem = function() {
+  var settings = set_up();
+  var monty_pick = monty_pick_a(settings.doors, settings.price, settings.player_choice);
+
+  var player_choice = settings.player_choice;
+  // if not switching doors: comment next line out
+  var player_choice = switch_door(settings.doors, player_choice, monty_pick);
+
+  return player_choice == settings.price;
+}
+
+var dist = Infer(monty_hall_problem);
+viz.auto(dist);
