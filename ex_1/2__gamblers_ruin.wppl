@@ -39,11 +39,11 @@ var game = function() {
   // return move_1(n1, n2).rounds;
 }
 
-// part a
+// part a -> answer: 24 (to be absolutely sure, 25)
 var dist = Infer(game);
 viz.auto(dist);
 
-// part b
+// part b -> answer: 25.28
 // var dist = Infer(game);
 // console.log(expectation(dist));
 
