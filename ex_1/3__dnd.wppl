@@ -1,0 +1,31 @@
+// global variables
+var n = 3;
+var f = 20;
+
+var throw_dices = function(n1, f1) {
+  var dice_res = randomInteger(f1);
+  if (n1 == 1) {
+    return dice_res;
+  } else {
+    var n2 = n1-1;
+    var throw_again = throw_dices(n2, f1);
+    return throw_again > dice_res ? throw_again : dice_res;
+  }
+}
+
+var game = function() {
+  throw_dices(n, f);
+}
+
+// part a -> result: 3.958333333333333
+// var dist = Infer(game);
+// console.log(expectation(dist));
+
+// part b
+//  -> result n=2: 0.64125
+//  -> result n=3: 0.7243750000000003
+//  -> result n=4: 0.7741668749999995
+//  approximate pattern: expected value in [0.5, 1), with larger n, goes towards 1, should be a function 1/x
+var dist = Infer(game);
+console.log(expectation(dist)/f);
+

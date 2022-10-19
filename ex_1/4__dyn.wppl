@@ -1,0 +1,40 @@
+var step = function(x1, v1, a, h, t1, tn) {
+  var x2 = x1 + h*v1;
+  var v2 = v1 + h*a;
+  var t2 = t1 + h;
+
+  if (t2 >= tn) {
+    return {
+      xn: x2,
+      vn: v2
+    }
+  } else {
+    return step(x2, v2, a, h, t2, tn);
+  }
+}
+
+var movement = function() {
+  var x0 = gaussian(0, 1);
+  var v0 = uniform(1, 10);
+  var a = uniform(1, 2);
+
+  var t0 = 0;
+  var tn = 10;
+  var h = 1;
+  
+  // return for a
+  // return step(x0, v0, a, h, t0, tn).xn;
+
+  // conditioning and result for b
+  var res = step(x0, v0, a, h, t0, tn);
+  observe(Gaussian({mu: 150, sigma: 10}), res.xn);
+  return res.vn;
+}
+
+// part a -> result: 121.42150018072053
+// var dist = Infer(movement);
+// console.log(expectation(dist));
+
+// part b -> result: 23.306876558849485
+var dist = Infer(movement);
+console.log(expectation(dist));
