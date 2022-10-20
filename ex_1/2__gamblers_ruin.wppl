@@ -1,4 +1,4 @@
-var move_1 = function(n1, n2) {
+var move = function(n1, n2) {
   var flipped = flip(0.5);
   var n1_new = flipped ? n1+1 : n1-1;
   var n2_new = flipped ? n2-1 : n2+1;
@@ -8,39 +8,25 @@ var move_1 = function(n1, n2) {
   } else if (n2_new == 0) {
     return {winner: 1, rounds: 1};
   } else {
-    var continue_game = move_2(n1_new, n2_new);
+    var continue_game = move(n1_new, n2_new);
     return {winner: continue_game.winner, rounds: continue_game.rounds + 1};
   }
 }
 
-var move_2 = function(n1, n2) {
-  var flipped = flip(0.5);
-  var n1_new = flipped ? n1+1 : n1-1;
-  var n2_new = flipped ? n2-1 : n2+1;
-
-  if (n1_new == 0) {
-    return {winner: 2, rounds: 1};
-  }  else if (n2_new == 0) {
-    return {winner: 1, rounds: 1};
-  } else {
-    var continue_game = move_1(n1_new, n2_new);
-    return {winner: continue_game.winner, rounds: continue_game.rounds + 1};
-  }
-}
 
 var game = function() {
-  var n1 = 5;
+  var n1 = 24;
   var n2 = 10;
   
   // to check part a of exercise
-  return move_1(n1, n2).winner == 1;
+  return move(n1, n2).winner == 1;
 
   // to check part b of exercise
   // return move_1(n1, n2).rounds;
 }
 
-// part a -> answer: 24 (to be absolutely sure, 25)
-var dist = Infer(game);
+// part a -> answer: 24
+var dist = Infer({model: game, method: 'rejection', samples: 7000});
 viz.auto(dist);
 
 // part b -> answer: 25.28
