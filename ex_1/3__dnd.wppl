@@ -1,35 +1,30 @@
-var move = function(n1, n2) {
-  var flipped = flip(0.5);
-  var n1_new = flipped ? n1+1 : n1-1;
-  var n2_new = flipped ? n2-1 : n2+1;
+// global variables
+var n = 3;
+var f = 20;
 
-  if (n1_new == 0) {
-    return {winner: 2, rounds: 1};
-  } else if (n2_new == 0) {
-    return {winner: 1, rounds: 1};
+var throw_dices = function(n1, f1) {
+  var dice_res = randomInteger(f1);
+  if (n1 == 1) {
+    return dice_res;
   } else {
-    var continue_game = move(n1_new, n2_new);
-    return {winner: continue_game.winner, rounds: continue_game.rounds + 1};
+    var n2 = n1-1;
+    var throw_again = throw_dices(n2, f1);
+    return throw_again > dice_res ? throw_again : dice_res;
   }
 }
 
-
 var game = function() {
-  var n1 = 24;
-  var n2 = 10;
-  
-  // to check part a of exercise
-  return move(n1, n2).winner == 1;
-
-  // to check part b of exercise
-  // return move_1(n1, n2).rounds;
+  throw_dices(n, f);
 }
 
-// part a -> answer: 24
-var dist = Infer({model: game, method: 'rejection', samples: 7000});
-viz.auto(dist);
-
-// part b -> answer: 25.28
+// part a -> result: 3.958333333333333
 // var dist = Infer(game);
 // console.log(expectation(dist));
 
+// part b
+//  -> result n=2: 0.64125
+//  -> result n=3: 0.7243750000000003
+//  -> result n=4: 0.7741668749999995
+//  approximate pattern: expected value in [0.5, 1), with larger n, goes towards 1, should be a function 1/x
+var dist = Infer(game);
+console.log(expectation(dist)/f);
